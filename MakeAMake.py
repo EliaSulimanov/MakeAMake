@@ -3,7 +3,7 @@ import pathlib
 import subprocess
 import glob
 from pick import pick
-
+from shutil import which
 
 title = 'Welcome to MakeAMake, please fill up the required fields: '
 a_title = 'This software was developed by Elia Sulimanov.\nCheck GitHub repository ' + \
@@ -15,7 +15,6 @@ a_options = ['pick ', 'Back']
 options_dict = {}
 objects = []
 dependencies = []
-dir_path = os.path.dirname(os.path.realpath(__file__))
 
 
 def press_enter_to_continue():
@@ -56,6 +55,7 @@ def pick_copyright_notice():
 
 def write_make_file():
     try:
+        print("Working on it...")
         f = open("Makefile", "w")
         f.write("CC = " + options_dict[0] + "\n")
         if len(objects) > 0:
@@ -70,10 +70,11 @@ def write_make_file():
         f.write("$(EXEC): $(OBJS)\n\t$(CC) $(COMP_FLAG) $(OBJS) -o $@\n")
         f.write("\n")
         for dependency in dependencies:
-            f.write(dependency + "\n\t$(CC) -c $(COMP_FLAG) $*.cpp\n")
+            f.write(dependency.rstrip() + "\n\t$(CC) -c $(COMP_FLAG) $*.cpp\n")
             f.write("\n")
         f.write("clean:\n\trm -f $(OBJS) $(EXEC)\n")
         f.close()
+        os.system('cls' if os.name == 'nt' else 'clear')
         print("Makefile created and located in: " + str(pathlib.Path().absolute()))
         press_enter_to_continue()
     except Exception as e:
@@ -82,10 +83,10 @@ def write_make_file():
 
 
 def make_a_make():
-    files = [f for f in glob.glob(dir_path + "**/*.cpp", recursive=True)]
+    files = [f for f in glob.glob("**/*.cpp", recursive=True)]
     for file in files:
         objects.append(os.path.splitext(os.path.basename(file))[0] + '.o')
-        dependencies.append(subprocess.run([options_dict[0], '-MM ' + os.path.basename(file)], stdout=subprocess.PIPE).stdout.decode('utf-8'))
+        dependencies.append(subprocess.run([options_dict[0], '-MM', os.path.basename(file)], stdout=subprocess.PIPE, shell=True).stdout.decode('utf-8'))
     write_make_file()
 
 
@@ -95,7 +96,7 @@ def check_options():
         press_enter_to_continue()
         return False
 
-    if subprocess.run([options_dict[0], '-v'], stdout=subprocess.PIPE).stdout.decode('utf-8').find("version") == -1:
+    if which(str(options_dict[0])) is None:
         print("Please check if gcc installed and if the path is correct\n")
         press_enter_to_continue()
         return False
