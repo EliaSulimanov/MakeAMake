@@ -9,8 +9,8 @@ title = 'Welcome to MakeAMake, please fill up the required fields: '
 a_title = 'This software was developed by Elia Sulimanov.\nCheck GitHub repository ' + \
     '@ https://github.com/EliaSulimanov/MakeAMake for further information.\n' + \
     'This software uses a open-source library named \'pick\', select it for copyright notice:'
-basic_options = ['Compiler path: ', 'Executable name: ', 'Additional flags: ', 'Run', 'About', 'Quit']
-options = ['Compiler path: ', 'Executable name: ', 'Additional flags: ', 'Run', 'About', 'Quit']
+basic_options = ['Compiler name: ', 'Executable name: ', 'Additional flags: ', 'Run', 'About', 'Quit']
+options = ['Compiler name: ', 'Executable name: ', 'Additional flags: ', 'Run', 'About', 'Quit']
 a_options = ['pick ', 'Back']
 options_dict = {}
 objects = []
@@ -55,7 +55,6 @@ def pick_copyright_notice():
 
 def write_make_file():
     try:
-        print("Working on it...")
         f = open("Makefile", "w")
         f.write("CC = " + options_dict[0] + "\n")
         if len(objects) > 0:
