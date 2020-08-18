@@ -45,5 +45,9 @@ Well, it is a tool that make a make(file) ☺️
 Yes, you need a compiler installed.  
 Make A Make uses the compiler to list the dependencies of your project, and write them to the makefile.
 
+## Copyright Notice
+This software uses a open-source library named pick.
+pick license can be found [here](https://github.com/EliaSulimanov/MakeAMake/blob/master/pick-LICENSE).
+
 ## License
 GPL 3.0
